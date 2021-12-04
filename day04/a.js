@@ -14,11 +14,11 @@ const solve = (data) => {
 
   for (const num of nums.split(/\D/)) {
     for (board of boards) {
-      const cell = board.cells[num];
-      if (cell) {
+      const pos = board.cells[num];
+      if (typeof pos !== 'undefined') {
         delete board.cells[num];
-        if (++board.rows[Math.floor(cell.i / SIZE)] === SIZE || ++board.cols[cell.i % SIZE] === SIZE) {
-          return num * Object.keys(board.cells).reduce((acc, key) => acc + key, 0);
+        if (++board.rows[Math.floor(pos / SIZE)] === SIZE || ++board.cols[pos % SIZE] === SIZE) {
+          return num * Object.keys(board.cells).reduce((acc, key) => acc + key * 1, 0);
         }
       }
     }

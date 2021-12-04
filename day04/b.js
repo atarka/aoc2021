@@ -11,18 +11,18 @@ const solve = (data) => {
     rows: new Array(SIZE).fill(0),
     cols: new Array(SIZE).fill(0),
     solved: false,
-    cells: board.split(/\D+/g).map((n, i) => ({n, i, marked: false}))
+    cells: board.split(/\D+/g).reduce((acc, n, i) => ({...acc, [n]: i}), {}),
   }));
 
   for (const num of nums.split(/\D/)) {
     for (board of boards) {
       if (board.solved) continue;
-      const pos = board.cells.find(cell => cell.n === num);
-      if (pos) {
-        pos.marked = true;
-        if (++board.rows[Math.floor(pos.i / SIZE)] === SIZE || ++board.cols[pos.i % SIZE] === SIZE) {
+      const pos = board.cells[num];
+      if (typeof board.cells[num] !== 'undefined') {
+        delete board.cells[num];
+        if (++board.rows[Math.floor(pos / SIZE)] === SIZE || ++board.cols[pos % SIZE] === SIZE) {
           board.solved = true;
-          lastSolved = num * board.cells.filter(cell => !cell.marked).reduce((acc, cell) => acc + cell.n * 1, 0);
+          lastSolved = num * Object.keys(board.cells).reduce((acc, key) => acc + key * 1, 0);
         }
       }
     }
