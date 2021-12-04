@@ -9,16 +9,16 @@ const solve = (data) => {
   const boards = boardData.map(board => ({
     rows: new Array(SIZE).fill(0),
     cols: new Array(SIZE).fill(0),
-    cells: board.split(/\D+/g).map((n, i) => ({n, i, marked: false}))
+    cells: board.split(/\D+/g).reduce((acc, n, i) => ({...acc, [n]: i}), {}),
   }));
 
   for (const num of nums.split(/\D/)) {
     for (board of boards) {
-      const pos = board.cells.find(cell => cell.n === num);
-      if (pos) {
-        pos.marked = true;
-        if (++board.rows[Math.floor(pos.i / SIZE)] === SIZE || ++board.cols[pos.i % SIZE] === SIZE) {
-          return num * board.cells.filter(cell => !cell.marked).reduce((acc, cell) => acc + cell.n * 1, 0);
+      const cell = board.cells[num];
+      if (cell) {
+        delete board.cells[num];
+        if (++board.rows[Math.floor(cell.i / SIZE)] === SIZE || ++board.cols[cell.i % SIZE] === SIZE) {
+          return num * Object.keys(board.cells).reduce((acc, key) => acc + key, 0);
         }
       }
     }
