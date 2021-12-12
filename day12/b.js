@@ -7,7 +7,7 @@ data.split(/\r?\n/g).map(connection => connection.split('-')).forEach(([from, to
   nodes[to] = (nodes[to] || []).concat(from);
 });
 
-const travel = (from, explored, path) => {
+const travel = (from, explored) => {
   let count = 0;
   if (from.toLowerCase() === from) {
     if (explored[from] === 2) return 0;
